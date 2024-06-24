@@ -1,0 +1,29 @@
+on:
+  push:
+    paths:
+      - "**.cs"
+      - "**.csproj"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Run build command
+        run: dotnet build
+
+      - name: Upload binary files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Aminoce@${{github.sha}}
+          path: ./src/Aminoce/bin/Debug/net8.0/
