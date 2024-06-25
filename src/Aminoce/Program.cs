@@ -1,4 +1,5 @@
-﻿using System.CommandLine.Parsing;
+﻿using System;
+using System.CommandLine.Parsing;
 
 namespace Aminoce;
 
@@ -9,8 +10,8 @@ public static class Program
         Console.CancelKeyPress += (_, _) => Console.WriteLine("^C");
 
         if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            Console.Title = $"Aminoce {AminoceApp.InformationalVersion}";
+            Console.Title = $"Aminoce {App.InformationalVersion}";
 
-        return CommandLineHelper.Create().Invoke(args);
+        return CommandLineFactory.Create().Invoke(args);
     }
 }

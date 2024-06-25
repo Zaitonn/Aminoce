@@ -11,6 +11,8 @@ public enum DataType
 
     String,
 
+    Boolean,
+
     Number,
 
     Array,

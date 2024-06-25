@@ -2,12 +2,13 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 using Aminoce.Models.Network;
 
 using EmbedIO;
 
-namespace Aminoce.Services.Server.Apis;
+namespace Aminoce.Services.Network.Apis;
 
 public static class ApiHelper
 {
@@ -26,7 +27,7 @@ public static class ApiHelper
         this IHttpContext httpContext,
         Packet<T> packet,
         HttpStatusCode httpStatusCode
-    ) => await SendPacketAsync<T>(httpContext, packet, (int)httpStatusCode);
+    ) => await SendPacketAsync(httpContext, packet, (int)httpStatusCode);
 
     public static async Task SendPacketAsync<T>(
         this IHttpContext httpContext,
@@ -34,28 +35,12 @@ public static class ApiHelper
         int httpStatusCode = 200
     )
     {
+        httpContext.Response.StatusCode = httpStatusCode;
         await httpContext.SendStringAsync(
             JsonSerializer.Serialize(packet, CamelCase),
             "text/json",
             UTF8
         );
-        httpContext.Response.StatusCode = httpStatusCode;
         httpContext.SetHandled();
-    }
-
-    public static async Task OnHttpException(IHttpContext context, IHttpException httpException)
-    {
-        await context.SendPacketAsync<object>(
-            new(null, DataType.Unknown) { Message = httpException.Message },
-            httpException.StatusCode
-        );
-    }
-
-    public static async Task OnException(IHttpContext context, Exception exception)
-    {
-        await context.SendPacketAsync<object>(
-            new(null, DataType.Unknown) { Message = $"{exception.GetType()}:{exception.Message}" },
-            HttpStatusCode.InternalServerError
-        );
     }
 }

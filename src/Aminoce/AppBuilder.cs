@@ -1,18 +1,20 @@
+using Aminoce.Models.Settings;
 using Aminoce.Services.Logging;
-using Aminoce.Services.Server;
-using Aminoce.Services.Server.Apis;
+using Aminoce.Services.Network;
+using Aminoce.Services.Network.Apis;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Aminoce;
 
-public class AminoceAppBuilder
+public class AppBuilder
 {
     private readonly HostApplicationBuilder _hostAppBuilder;
 
-    public AminoceAppBuilder()
+    public AppBuilder()
     {
         _hostAppBuilder = new HostApplicationBuilder();
         _hostAppBuilder.Logging.ClearProviders();
@@ -20,7 +22,12 @@ public class AminoceAppBuilder
 
         _hostAppBuilder.Services.AddSingleton<HttpServer>();
         _hostAppBuilder.Services.AddSingleton<ApiController>();
+        _hostAppBuilder.Services.AddSingleton<AuthGate>();
+
+        _hostAppBuilder.Services.Configure<NetworkSettings>(
+            options => _hostAppBuilder.Configuration.GetSection("Network").Bind(options)
+        );
     }
 
-    public AminoceApp Build() => new(_hostAppBuilder.Build());
+    public App Build() => new(_hostAppBuilder.Build());
 }

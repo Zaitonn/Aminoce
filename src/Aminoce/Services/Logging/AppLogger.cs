@@ -1,3 +1,5 @@
+using System;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -34,32 +36,32 @@ public class AppLogger(string title, IConfiguration configuration) : ILogger
         {
             case LogLevel.Trace:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [mediumpurple4]Trace[/] {_title} {line}"
+                    $"{DateTime.Now:T} [mediumpurple4]Trace[/] [[{_title}]] {line}"
                 );
                 break;
             case LogLevel.Debug:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [mediumpurple4]Debug[/] {_title} {line}"
+                    $"{DateTime.Now:T} [mediumpurple4]Debug[/] [[{_title}]] {line}"
                 );
                 break;
             case LogLevel.Information:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [cadetblue_1]Information[/] {_title} {line}"
+                    $"{DateTime.Now:T} [cadetblue_1]Information[/] [[{_title}]] {line}"
                 );
                 break;
             case LogLevel.Warning:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [yellow bold]Warning {_title} {line}[/]"
+                    $"{DateTime.Now:T} [yellow bold]Warning [[{_title}]] {line}[/]"
                 );
                 break;
             case LogLevel.Error:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [red bold]Error {_title} {line}[/]"
+                    $"{DateTime.Now:T} [red bold]Error [[{_title}]] {line}[/]"
                 );
                 break;
             case LogLevel.Critical:
                 AnsiConsole.MarkupLineInterpolated(
-                    $"{DateTime.Now:T} [maroon blod]Critical {_title} {line}[/]"
+                    $"{DateTime.Now:T} [maroon bold]Critical [[{_title}]] {line}[/]"
                 );
                 break;
             case LogLevel.None:
